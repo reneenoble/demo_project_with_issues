@@ -3,7 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Set
 
 
 class ListingType(str, Enum):
@@ -18,7 +17,7 @@ class User:
     display_name: str
     postal_code: str
     trust_score: float = 0.5
-    interests: Set[ListingType] = field(default_factory=set)
+    interests: set[ListingType] = field(default_factory=set)
 
 
 @dataclass(slots=True)
@@ -30,7 +29,7 @@ class Listing:
     quantity: int
     created_at: datetime
     expires_at: datetime | None = None
-    tags: Set[str] = field(default_factory=set)
+    tags: set[str] = field(default_factory=set)
 
     def is_active(self, now: datetime) -> bool:
         return self.quantity > 0 and (self.expires_at is None or self.expires_at >= now)
