@@ -1,6 +1,7 @@
 from datetime import UTC, datetime, timedelta
 import hashlib
 import hmac
+import json
 import unittest
 
 from community_share.auth import BasicSSOProvider, SSOValidationError
@@ -56,6 +57,20 @@ class MatchingEngineTests(unittest.TestCase):
 
 
 class SSOProviderTests(unittest.TestCase):
+    def test_valid_token_normalizes_email(self) -> None:
+        provider = BasicSSOProvider("secret")
+        payload = json.dumps(
+            {"provider": "demo", "subject": "abc123", "email": "User@Example.Com"}
+        )
+        signature = hmac.new(
+            b"secret",
+            payload.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
+
+        profile = provider.validate_token(f"{payload}.{signature}")
+        self.assertEqual(profile.email, "user@example.com")
+
     def test_malformed_payload_raises_validation_error(self) -> None:
         provider = BasicSSOProvider("secret")
         payload = "{invalid-json"

@@ -3,7 +3,10 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
+import re
 from dataclasses import dataclass
+
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 
 @dataclass(slots=True)
@@ -28,7 +31,7 @@ class BasicSSOProvider:
 
     def validate_token(self, token: str) -> SSOProfile:
         try:
-            payload_raw, signature = token.split(".", 1)
+            payload_raw, signature = token.rsplit(".", 1)
         except ValueError as exc:
             raise SSOValidationError("Malformed token") from exc
 
@@ -46,9 +49,12 @@ class BasicSSOProvider:
         for key in ("provider", "subject", "email"):
             if key not in payload:
                 raise SSOValidationError(f"Missing field: {key}")
+        email = str(payload["email"]).strip().lower()
+        if not _EMAIL_RE.match(email):
+            raise SSOValidationError("Invalid email format")
 
         return SSOProfile(
             provider=payload["provider"],
             subject=payload["subject"],
-            email=payload["email"],
+            email=email,
         )

@@ -14,11 +14,11 @@
     "description": "Add configurable priority weights (household size, urgency, trust_score, age of request) and update matching to use weighted ordering rather than simple FIFO. Include deterministic tie-breaking."
   },
   {
-    "title": "Bug: SSO validator accepts non-email identifiers without normalization",
+    "title": "Bug: SSO validator has no token expiry enforcement",
     "type": "bug",
     "difficulty": "junior",
     "labels": ["bug", "auth", "validation", "security"],
-    "description": "BasicSSOProvider validates signature but does not validate email format or casing normalization. Add robust email checks and normalized identity handling."
+    "description": "BasicSSOProvider validates signature but does not check token expiry claims, so old tokens could be replayed indefinitely. Add exp validation and clock-skew handling."
   },
   {
     "title": "Feature: Add audit log endpoint for donation lifecycle",
