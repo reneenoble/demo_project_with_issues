@@ -39,7 +39,10 @@ class BasicSSOProvider:
         if not hmac.compare_digest(signature, expected_signature):
             raise SSOValidationError("Invalid token signature")
 
-        payload = json.loads(payload_raw)
+        try:
+            payload = json.loads(payload_raw)
+        except json.JSONDecodeError as exc:
+            raise SSOValidationError("Malformed token payload") from exc
         for key in ("provider", "subject", "email"):
             if key not in payload:
                 raise SSOValidationError(f"Missing field: {key}")

@@ -1,6 +1,9 @@
 from datetime import UTC, datetime, timedelta
+import hashlib
+import hmac
 import unittest
 
+from community_share.auth import BasicSSOProvider, SSOValidationError
 from community_share.models import Listing, ListingType, Request, User
 from community_share.services import MatchingEngine
 
@@ -50,6 +53,20 @@ class MatchingEngineTests(unittest.TestCase):
 
         matches = MatchingEngine().match_requests(users, listings, requests, now)
         self.assertEqual(matches, [])
+
+
+class SSOProviderTests(unittest.TestCase):
+    def test_malformed_payload_raises_validation_error(self) -> None:
+        provider = BasicSSOProvider("secret")
+        payload = "{invalid-json"
+        signature = hmac.new(
+            b"secret",
+            payload.encode("utf-8"),
+            hashlib.sha256,
+        ).hexdigest()
+
+        with self.assertRaises(SSOValidationError):
+            provider.validate_token(f"{payload}.{signature}")
 
 
 if __name__ == "__main__":
