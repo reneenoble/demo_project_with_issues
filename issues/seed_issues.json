@@ -1,0 +1,72 @@
+[
+  {
+    "title": "Bug: Matching engine mutates listing quantities across repeated simulations",
+    "type": "bug",
+    "difficulty": "intermediate",
+    "labels": ["bug", "backend", "state-management", "good first issue"],
+    "description": "The MatchingEngine updates listing.quantity in place. If the same listing objects are reused for simulation or analytics runs, results drift unexpectedly. Create an immutable planning mode or deep-copy strategy and add regression tests."
+  },
+  {
+    "title": "Feature: Add waitlist priority scoring for vulnerable households",
+    "type": "feature",
+    "difficulty": "advanced",
+    "labels": ["enhancement", "algorithm", "priority"],
+    "description": "Add configurable priority weights (household size, urgency, trust_score, age of request) and update matching to use weighted ordering rather than simple FIFO. Include deterministic tie-breaking."
+  },
+  {
+    "title": "Bug: SSO validator has no token expiry enforcement",
+    "type": "bug",
+    "difficulty": "junior",
+    "labels": ["bug", "auth", "validation", "security"],
+    "description": "BasicSSOProvider validates signature but does not check token expiry claims, so old tokens could be replayed indefinitely. Add exp validation and clock-skew handling."
+  },
+  {
+    "title": "Feature: Add audit log endpoint for donation lifecycle",
+    "type": "feature",
+    "difficulty": "intermediate",
+    "labels": ["enhancement", "api", "observability"],
+    "description": "Introduce an append-only audit log model for create/update/match/fulfillment events and expose a paginated API endpoint filtered by listing_id and user_id."
+  },
+  {
+    "title": "Bug: Distance calculation produces collisions between unrelated postcodes",
+    "type": "bug",
+    "difficulty": "intermediate",
+    "labels": ["bug", "algorithm", "data-quality"],
+    "description": "_postal_distance currently uses a simplistic character-sum modulo approach that maps many different postcodes to identical distances. Replace with a deterministic but less collision-prone strategy."
+  },
+  {
+    "title": "Feature: Introduce role-based access control for moderators",
+    "type": "feature",
+    "difficulty": "advanced",
+    "labels": ["enhancement", "auth", "rbac"],
+    "description": "Add roles (member, moderator, admin) and enforce permissions on listing moderation and issue-resolution workflows. Include authorization middleware and tests."
+  },
+  {
+    "title": "Bug: Demo /demo/matches endpoint can return stale timestamps",
+    "type": "bug",
+    "difficulty": "junior",
+    "labels": ["bug", "api", "time-handling"],
+    "description": "The endpoint generates timestamps at multiple points and can produce inconsistent ordering in edge conditions. Refactor to use a single request timestamp source."
+  },
+  {
+    "title": "Feature: Add recurring donation subscriptions for vegetable growers",
+    "type": "feature",
+    "difficulty": "intermediate",
+    "labels": ["enhancement", "scheduling", "domain"],
+    "description": "Allow users to schedule recurring weekly or monthly vegetable donations with pause/resume support and conflict resolution when inventory is low."
+  },
+  {
+    "title": "Bug: Missing pagination in future list endpoints may cause memory spikes",
+    "type": "bug",
+    "difficulty": "advanced",
+    "labels": ["bug", "performance", "api"],
+    "description": "Planned list endpoints should be paginated. Define reusable pagination contracts and protect against large payloads to avoid memory pressure."
+  },
+  {
+    "title": "Feature: Build recommendation engine for nearby book swaps",
+    "type": "feature",
+    "difficulty": "advanced",
+    "labels": ["enhancement", "recommendations", "ml-lite"],
+    "description": "Recommend listings using user interests, prior matches, and locality constraints. Start with a heuristic baseline and leave extension points for model-based ranking."
+  }
+]
