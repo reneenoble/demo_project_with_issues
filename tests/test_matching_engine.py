@@ -6,10 +6,14 @@ import unittest
 
 from community_share.auth import BasicSSOProvider, SSOValidationError
 from community_share.models import Listing, ListingType, Request, User
-from community_share.services import MatchingEngine
+from community_share.services import MatchingEngine, _postal_distance
 
 
 class MatchingEngineTests(unittest.TestCase):
+    def test_postal_distance_distinguishes_colliding_codes(self) -> None:
+        self.assertEqual(_postal_distance("AB12", "AB12"), 0)
+        self.assertGreater(_postal_distance("AB12", "BA12"), 0)
+
     def test_matches_respect_distance_and_quantity(self) -> None:
         now = datetime.now(UTC)
         users = {
