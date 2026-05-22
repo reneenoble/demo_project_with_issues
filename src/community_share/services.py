@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from itertools import zip_longest
 from typing import Iterable
 
 from .models import Listing, Request, User
@@ -9,7 +10,15 @@ from .models import Listing, Request, User
 
 def _postal_distance(postal_a: str, postal_b: str) -> int:
     # A placeholder distance function for demo data.
-    return abs(sum(ord(c) for c in postal_a) - sum(ord(c) for c in postal_b)) % 40
+    distance = sum(
+        abs(ord(char_a) - ord(char_b))
+        for char_a, char_b in zip_longest(
+            postal_a.upper(),
+            postal_b.upper(),
+            fillvalue="\0",
+        )
+    )
+    return min(distance, 40)
 
 
 @dataclass(slots=True)
